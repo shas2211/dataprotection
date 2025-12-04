@@ -50,4 +50,43 @@ This project is aligned with industry frameworks like:
 ---
 
 ## 🧠 System Architecture
+User Input
+↓
+PII Detection (Regex + ML)
+↓
+Risk Score + Classification
+↓
+Data Masking + Partial Redaction
+↓
+Compliance Dashboard + Audit Logs
+↓
+Report Export (PDF)
+
+
+---
+
+## 🛠 Tech Stack
+
+| Layer | Tools |
+|------|------|
+| Backend | Python, Flask |
+| ML / NLP | SpaCy (en_core_web_sm) |
+| Database | SQLite |
+| Reporting | ReportLab PDF |
+| Security | Masking engine & RBAC |
+
+---
+
+## 🚀 Setup Instructions
+
+Clone the repository:
+
+```bash
+git clone https://github.com/<your-username>/PII-Protection-System.git
+cd PII-Protection-System
+python -m venv venv
+venv\Scripts\activate   # Windows
+pip install -r requirements.txt
+python -m spacy download en_core_web_sm
+python app.py
 
