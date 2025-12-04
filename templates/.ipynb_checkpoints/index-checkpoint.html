@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Scan for Sensitive PII</h2>
+<p>Paste any text containing PII like Emails, Aadhaar, PAN, Phone etc.</p>
+
+<form method="POST">
+    <textarea name="input_text" placeholder="Enter text here...">{{ input_text }}</textarea>
+    <br>
+    <button type="submit">🔍 Scan Data</button>
+</form>
+
+<br>
+
+{% if pii_found %}
+
+    <h3>📌 Risk Report</h3>
+    <div class="result-box">
+        <strong>Score:</strong> {{ risk_score }} <br>
+        <strong>Level:</strong> {{ risk_level }}
+    </div>
+
+    {% if protected_text %}
+        <h3>🔒 Protected (Masked) Output</h3>
+        <div class="result-box">{{ protected_text }}</div>
+    {% endif %}
+
+    <details style="margin-top:1rem;">
+        <summary>🔍 Show Detected PII (Analyst Only)</summary>
+        <div class="result-box">
+            {% for label, items in pii_found.items() %}
+                <div><strong>{{ label }}:</strong> {{ items | join(", ") }}</div>
+            {% endfor %}
+        </div>
+    </details>
+
+    <!-- Report Button -->
+    <form action="/report" method="POST" style="margin-top:1rem;">
+        <input type="hidden" name="input_text" value="{{ input_text }}">
+        <button type="submit">📄 Generate Compliance Report</button>
+    </form>
+
+{% elif input_text %}
+    <div class="result-box">No PII Detected.</div>
+{% endif %}
+
+{% endblock %}

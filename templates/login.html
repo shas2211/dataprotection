@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Login</h2>
+<p>Use demo accounts: <code>analyst / flipkart123</code> or <code>viewer / viewer123</code></p>
+
+{% if error %}
+    <div class="result-box" style="color:#b91c1c; background:#fee2e2;">
+        {{ error }}
+    </div>
+{% endif %}
+
+<form method="POST">
+    <div style="margin-bottom:0.5rem;">
+        <label>Username</label><br>
+        <input type="text" name="username" style="width:100%;padding:0.5rem;border-radius:8px;border:1px solid #d1d5db;">
+    </div>
+    <div style="margin-bottom:0.5rem;">
+        <label>Password</label><br>
+        <input type="password" name="password" style="width:100%;padding:0.5rem;border-radius:8px;border:1px solid #d1d5db;">
+    </div>
+    <button type="submit">Login</button>
+</form>
+
+{% endblock %}

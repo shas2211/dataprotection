@@ -1,0 +1,4 @@
+flask
+cryptography
+reportlab
+spacy

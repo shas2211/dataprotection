@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>📄 PII Security Compliance Report</h2>
+
+<p><strong>Risk Level:</strong> {{ risk_level }} </p>
+<p><strong>Risk Score:</strong> {{ risk_score }} </p>
+<hr>
+
+<h3>🔍 PII Summary</h3>
+<ul>
+{% for label, items in pii_found.items() %}
+    <li>{{ label }} → {{ items|length }} found</li>
+{% endfor %}
+</ul>
+
+<hr>
+
+<h3>🔒 Protected Data View</h3>
+<div class="result-box">{{ protected_text }}</div>
+
+<hr>
+
+<h3>✔ Compliance Recommendations</h3>
+<ul>
+{% if pii_found.get('Aadhaar') %}
+    <li>Encrypt Aadhaar using AES-256</li>
+{% endif %}
+{% if pii_found.get('PAN') %}
+    <li>Fully mask PAN in user-facing environments</li>
+{% endif %}
+{% if pii_found.get('Phone') %}
+    <li>Restrict contact info visibility based on user role</li>
+{% endif %}
+{% if pii_found.get('Email') %}
+    <li>Do not log email addresses in plaintext</li>
+{% endif %}
+<li>Establish audit logs for all sensitive data access</li>
+</ul>
+
+<br>
+<a href="{{ url_for('index') }}">⬅ Back to Scanner</a>
+
+{% endblock %}

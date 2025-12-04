@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2>Scan for Sensitive PII</h2>
+<p>Paste any text containing PII like Emails, Aadhaar, PAN, Phone etc.</p>
+
+{% if ml_enabled %}
+<p style="font-size:0.9rem; color:#16a34a;">ML-based detection (names, locations, orgs) is enabled.</p>
+{% else %}
+<p style="font-size:0.9rem; color:#9ca3af;">ML-based PII detection not available (SpaCy model not loaded).</p>
+{% endif %}
+
+<form method="POST">
+    <textarea name="input_text" placeholder="Enter text here...">{{ input_text }}</textarea>
+    <br>
+    <button type="submit">🔍 Scan Data</button>
+</form>
+
+<br>
+
+{% if pii_found %}
+
+    <h3>📌 Risk Report</h3>
+    <div class="result-box">
+        <strong>Score:</strong> {{ risk_score }} <br>
+        <strong>Level:</strong> {{ risk_level }}
+    </div>
+
+    {% if protected_text %}
+        <h3>🔒 Protected (Masked) Output</h3>
+        <div class="result-box">{{ protected_text }}</div>
+    {% endif %}
+
+    {% if is_analyst %}
+        <details style="margin-top:1rem;">
+            <summary>🔍 Show Detected PII (Analyst Only)</summary>
+            <div class="result-box">
+                {% for label, items in pii_found.items() %}
+                    <div><strong>{{ label }}:</strong> {{ items | join(", ") }}</div>
+                {% endfor %}
+            </div>
+        </details>
+    {% else %}
+        <p style="font-size:0.85rem; color:#6b7280; margin-top:0.5rem;">
+            Log in as <strong>analyst</strong> to view detailed PII list.
+        </p>
+    {% endif %}
+
+    <!-- Report & PDF buttons -->
+    <form action="{{ url_for('report') }}" method="POST" style="margin-top:1rem; display:inline-block;">
+        <input type="hidden" name="input_text" value="{{ input_text }}">
+        <button type="submit">📄 View Compliance Report</button>
+    </form>
+
+    <form action="{{ url_for('report_pdf') }}" method="POST" style="margin-top:1rem; display:inline-block; margin-left:0.5rem;">
+        <input type="hidden" name="input_text" value="{{ input_text }}">
+        <button type="submit">⬇ Download PDF Report</button>
+    </form>
+
+{% elif input_text %}
+    <div class="result-box">No PII Detected.</div>
+{% endif %}
+
+{% endblock %}
